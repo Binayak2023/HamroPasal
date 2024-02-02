@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}My Orders{% endblock title %}
+{% block maincontent %}
+<div class="container cart" style="padding: 0;">
+    {% if user.is_authenticated %}
+    {% if forders %}
+      {% for orders in forders %}
+        <table>
+          <tr>
+            <th style="border-bottom: 1px solid white;">
+              <span>Ordered: {{orders.0.ordered_date|naturaltime}}</span>
+            </th>
+            <th>
+              {% if orders.0.promo_discount > 0 %}
+              <span>Promo Code Discount: <strong>Rs. {{orders.0.promo_discount}}</strong></span>
+              {% endif %}
+            </th>
+            <th>
+              <span>Delivery Charge: <strong>Rs.{{orders.0.delivery_charge}}</strong> Only</span>
+            </th>
+            <th>
+              <span>Total Cost: <strong>Rs. {{orders.0.total_cost}}</strong></span>
+            </th>
+          </tr>
+          <tr id='carttablerow'>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Cost</th>
+            <th style="text-align: center;">Order Status</th>
+          </tr>
+          {% if orders %}
+            {% for o in orders %}
+              <tr style="border-bottom: 1px solid rgb(233, 233, 233);">
+                <td>
+                  <div class="cart-info">
+                    <img src="{{o.product.photo.url}}" alt="{{ o.product.name }}" />
+                    <div>
+                      <span><a href="{% url 'productdetail' o.product.slug %}" style="color: #d83c27;font-size: 17px;">{{o.product.name}}</a></span> <br />
+                      <span>Price: Rs.{{o.product.selling_price}}</span><br>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p style="font-weight: 500;">{{o.quantity}}</p>
+                </td>
+                <td><p style="color: #ce4f3e;">Rs.{{o.total_price}}.0</p></td>
+                <td class="order-status">
+                  {% if o.order_status == 'pending' %}
+                  <p><span class="span-status">Pending</span></p>
+                  <p><span class="span-percentage pending"><span class="percent">20%</span></span></p>
+                  {% elif o.order_status == 'received' %}
+                  <p><span class="span-status">Received</span></p>
+                  <p><span class="span-percentage received"><span class="percent">40%</span></span></p>
+                  {% elif o.order_status == 'packed' %}
+                  <p><span class="span-status">Packed</span></p>
+                  <p><span class="span-percentage packed"><span class="percent">60%</span></span></p>
+                  {% elif o.order_status == 'on_the_way' %}
+                  <p><span class="span-status">On The Way</span></p>
+                  <p><span class="span-percentage ontheway"><span class="percent">80%</span></span></p>
+                  {% elif o.order_status == 'delivered' %}
+                  <p><span class="span-status">Delivered</span></p>
+                  <p><span class="span-percentage delivered"><span class="percent">100%</span></span></p>
+                  {% else %}
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </table>
+        <hr><br>
+      {% endfor %}
+    {% else %}
+    <table>
+      <tr id='carttablerow'>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+        <th style="text-align: center;">Order Status</th>
+      </tr>
+      <h3>No orders are placed yet</h3>
+        <h3>Get the best products <a style="color: #ce4f3e;" href="{% url 'products' %}">&nbsp;Here</a> </h3>
+    </table>
+    {% endif %}
+    {% else %}
+      <table>
+        <tr id='carttablerow'>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Cost</th>
+          <th style="text-align: center;">Order Status</th>
+        </tr>
+        <h3>No orders are placed yet</h3>
+          <h3><a style="color: #ce4f3e;" href="{% url 'login' %}">Login</a> or <a style="color: #ce4f3e;" href="{% url 'signup' %}">Signup</a> to place orders</h3>
+      </table>
+    {% endif %}
+  </div>
+
+{% endblock maincontent %}
+{% block jscode %}
+<style>
+
+</style>
+{% endblock jscode %}

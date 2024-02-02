@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}My Addresses | HamroPasal{% endblock title %}
+{% block additionalheader %}
+<meta name="robots" content="nofollow" />
+{% endblock additionalheader %}
+{% block maincontent %} 
+<div class="customer-container">
+    <div class="indicators">
+        <div class="buttons">
+            <a href="{% url 'addcustomer' %}"><button><i class="fas fa-plus-circle"></i> Add new address</button></a>
+            <a href="{% url 'customers' %}"><button>My addresses</button></a>
+        </div>
+    </div>
+    <div class="customer-list d-flex">
+        <h1>My Addresses</h1>
+        {% for c in customers %}
+        <div class="customer-box">
+            <h2>Address {{forloop.counter}}</h2>
+            <p>Name: {{c.full_name}}</p>
+            <p>District: {{c.district}}</p>
+            <p>Address: {{c.address}}</p>
+            <p>Locality: {{c.locality}}</p>
+            <p>Phone no: {{c.phone_no}}</p>
+            {% if c.house_no %}
+            <p>House no:{{c.house_no}}</p>
+            {% endif %}
+            {% if c.zip_code %}
+            <p>Zip code: {{c.zip_code}}</p>
+            {% endif %}
+            <a href="{% url 'deleteaddress' c.id %}">
+                <button><i class="fas fa-trash"></i> Delete</button>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock maincontent %}
+

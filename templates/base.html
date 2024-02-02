@@ -1,0 +1,373 @@
+{% load static %}
+{% load cache %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="shortcut icon" href="{% static 'img/logo.png' %}" type="image/png">
+    <!-- Glide js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/css/glide.core.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/css/glide.theme.css">
+    <!-- Owl Carousel js -->
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <!-- Boxicons -->
+    <link
+    href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+    rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/655257df20.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Custom StyleSheet -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/navigation.css' %}" />
+    {% block css %}{% endblock css %}
+  </head>
+  <body>
+
+    <!-- Message Alert -->
+    {%if messages %}
+    {% for message in messages %}
+    <div class="alert" style="display: none;">
+      <span></span>
+      <span>{{message}}</span>
+      <span>&#10006;</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Cart Popup -->
+{% if user.is_authenticated %}
+    <div class="cartpopup">
+      <div class="cartpopupexit">
+        <span style="padding: 0 1rem;">&times;</span>
+      </div>
+      <div class="cartpopupprodcontainer">
+      </div>
+      <div class="cartpopupprodsubtotal">
+        <p><strong></strong></p>
+      </div>
+      <div class="cartpopupprodcartcheckout">
+        <a href="{% url 'cart' %}"><button>View Cart</button></a>
+        <a href="{% url 'checkout' %}"><button>Checkout</button></a>
+      </div>
+    </div>
+{% endif %}
+
+<!-- Profile popup -->
+{% if user.is_authenticated %}
+<div class="profile-popup">
+  <ul>
+    <li><a href="{% url 'profile' user.id %}">Profile</a></li>
+    <li><a href="{% url 'customers' %}">My Addresses</a></li>
+    <li><a href="{% url 'wishlist' %}">My Favorites</a></li>
+    <li><a href="{% url 'orders' %}">My Orders</a></li>
+    <li><a href="{% url 'change_password' %}">Change Password</a></li>
+    <li><a href="{% url 'logout' %}">Log Out</a></li>
+  </ul>
+</div>
+{% endif %}
+
+    <!-- Header -->
+
+    {% comment %} <div class="top-nav" style="background: #78a9ee" >
+      <div class="d-flex" >
+        <p>
+          <span class="order-span"  style="color: black;">
+          <i class="span-order-now">Call Us</i> &nbsp;&nbsp;<i class="fas fa-phone-alt phone-ani"></i>: 
+          9765230360 / 9867435674
+        </span>
+        </p>
+        <ul class="d-flex"  style="color: black;">
+          {% if user.is_anonymous %}
+          <li style="padding: 0 4px;" ><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+          <li style="padding: 0 4px;"><a href="{% url 'signup' %}"><i class="fas fa-sign-out-alt" style="transform: rotate(-90deg);"></i> Signup</a></li>
+          {% else %}
+          <li class="topnav-profile"><a href="{% url 'profile' user.id %}">{% if user.first_name%}{{user.first_name}}{% else %}{{user.username}}{% endif %}</a></li>
+          {% endif %}
+          <li style="padding: 0 4px;"><a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+      </div>
+    </div> {% endcomment %}
+    
+    <nav class="snav" style="z-index: 999999;">
+      <div class="navbar">
+        <i class='bx bx-menu'></i>
+        <div class="logo">
+          <a href="{% url 'home' %}">
+            <span>HamroPasal</span>
+          </a>
+        </div>
+        <div class="nav-links">
+          <div class="sidebar-logo">
+            <span class="logo-name">MENU</span>
+            <i class='bx bx-x' ></i>
+          </div>
+          <ul class="links">
+            <li class="showhome"><a href="{% url 'home' %}">HOME</a></li>
+            <li><a href="{% url 'products' %}" >ALL PRODUCTS</a></li>
+            <li>
+              <a href="{% url 'skincare' %}">Eectronics</a>
+              <i class='bx bxs-chevron-down skincare-arrow arrow  '></i>
+              <ul class="skincare-sub-menu sub-menu">
+                <li><a href="{% url 'skincare' %}?sort=1">Phone</a></li>
+                <li><a href="{% url 'skincare' %}?sort=2">Tablets</a></li>
+                <li><a href="{% url 'skincare' %}?sort=3">Accessories</a></li>
+                {% comment %} <li><a href="{% url 'skincare' %}?sort=4">Sunscreen</a></li>
+                <li><a href="{% url 'skincare' %}?sort=5">Toner</a></li>
+                <li><a href="{% url 'skincare' %}?sort=6">Acne Treatment</a></li> {% endcomment %}
+                <li><a href="{% url 'skincare' %}?sort=7">Other</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'face' %}">Womwn's Fashion</a>
+              <i class='bx bxs-chevron-down face-arrow arrow '></i>
+              <ul class="face-sub-menu sub-menu">
+                <li><a href="{% url 'face' %}?sort=1">Primer</a></li>
+                <li><a href="{% url 'face' %}?sort=2">Foundation</a></li>
+                <li><a href="{% url 'face' %}?sort=3">Blush</a></li>
+                <li><a href="{% url 'face' %}?sort=4">Cancealer</a></li>
+                <li><a href="{% url 'face' %}?sort=5">Bronzer</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'body' %}">Men's Fashion</a>
+              <i class='bx bxs-chevron-down body-arrow arrow '></i>
+              <ul class="body-sub-menu sub-menu">
+                <li><a href="{% url 'body' %}?sort=1">Body Lotion</a></li>
+                <li><a href="{% url 'body' %}?sort=2">Body Wash</a></li>
+                <li><a href="{% url 'body' %}?sort=3">Deodorant</a></li>
+                <li><a href="{% url 'body' %}?sort=4">Supplements</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'lipsandeyes' %}">Lifestyle</a>
+              <i class='bx bxs-chevron-down lips-eyes-arrow arrow '></i>
+              <ul class="lips-eyes-sub-menu sub-menu">
+                <li><a href="{% url 'lipsandeyes' %}?sort=1">Furniture</a></li>
+                <li><a href="{% url 'lipsandeyes' %}?sort=2">Canvas</a></li>
+                <li><a href="{% url 'lipsandeyes' %}?sort=3">Statue</a></li>
+                {% comment %} <li><a href="{% url 'lipsandeyes' %}?sort=4">Lip Liner</a></li>
+                <li><a href="{% url 'lipsandeyes' %}?sort=5">Lips Mask</a></li>
+                <li><a href="{% url 'lipsandeyes' %}?sort=6">Eye Shadow</a></li>
+                <li><a href="{% url 'lipsandeyes' %}?sort=7">Mascara</a></li>
+                <li><a href="{% url 'lipsandeyes' %}?sort=8">Eye Liner</a></li> {% endcomment %}
+              </ul>
+            </li>
+            <li>
+              {% comment %} <a href="{% url 'hair' %}">HAIR</a>
+              <i class='bx bxs-chevron-down hair-arrow arrow '></i>
+              <ul class="hair-sub-menu sub-menu">
+                <li><a href="{% url 'hair' %}?sort=1">Hair Treatment</a></li>
+                <li><a href="{% url 'hair' %}?sort=2">Hair Serum</a></li>
+                <li><a href="{% url 'hair' %}?sort=3">Hair Shampoo</a></li>
+                <li><a href="{% url 'hair' %}?sort=4">Hair Conditioner</a></li>
+              </ul> {% endcomment %}
+            </li>
+            {% if user.is_authenticated %}
+            <li>
+              <a href="#"><i class="fas fa-user"></i> PROFILE</a>
+              <i class='bx bxs-chevron-down profile-arrow arrow '></i>
+              <ul class="profile-sub-menu sub-menu" style="z-index: 999;">
+                <li><a href="{% url 'profile' user.id %}">My Profile</a></li>
+                <li><a href="{% url 'orders' %}">My Orders</a></li>
+                {% if user.is_superuser %}
+                <li><a href="/admin/" target="_blank">Admin Panel</a></li>
+                {% endif %}
+                <li><a href="{% url 'wishlist' %}">My Favorites</a></li>
+                <li><a href="{% url 'customers' %}">My Addresses</a></li>
+                <li><a href="{% url 'addcustomer' %}">Add Address</a></li>
+                <li><a href="{% url 'change_password' %}">Change Password</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+              </ul>
+            </li>
+            {% endif %}
+            <ul class="d-flex"  style="color: black;">
+              {% if user.is_anonymous %}
+              <li style="padding: 0 4px;" ><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+              <li style="padding: 0 4px;"><a href="{% url 'signup' %}"><i class="fas fa-sign-out-alt" style="transform: rotate(-90deg);"></i> Signup</a></li>
+              {% else %}
+              <li class="topnav-profile"><a href="{% url 'profile' user.id %}">{% if user.first_name%}{{user.first_name}}{% else %}{{user.username}}{% endif %}</a></li>
+              {% endif %}
+              <li style="padding: 0 4px;"><a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+          </ul>
+        </div>
+
+        <!-- Navbar Right Side -->
+        <div class="rightsidenav">
+            <div class="search-box">
+              <i class='fas fa-search'></i>
+              <form action="{% url 'search' %}" method="GET">
+              <div class="input-box">
+                  <input type="search" name="query" id="query" placeholder="Search Products...">
+                </div>
+              </form>
+            </div>
+            
+            <div class="cartandwishlist">
+              {% if user.is_authenticated %}
+              {% if wishlistcount %}
+                <a href="{% url 'wishlist' %}" class="icon">
+                  <i class="fas fa-heart"></i>
+                  <span class="d-flex wishlistcounter">{{wishlistcount}}</span>
+                </a>
+              {% elif wishlistcount == 0 %}
+                <a href="{% url 'wishlist' %}" class="icon">
+                  <i class="fas fa-heart"></i>
+                  <span class="d-flex wishlistcounter">0</span>
+                </a>
+              {% else %}
+                <a href="{% url 'wishlist' %}" class="icon">
+                  <i class="fas fa-heart"></i>
+                </a>
+              {% endif %}
+            {% else %}
+            <a href="{% url 'wishlist' %}" class="icon">
+              <i class="fas fa-heart"></i>
+              <span class="d-flex wishlistcounter">0</span>
+            </a>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+              {% if cartprodcount > 0 %}
+                <a href="{% url 'cart' %}" class="icon">
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="d-flex cartproductcount">{{cartprodcount}}</span>
+                </a>
+              {% elif cartprodcount == 0 %}
+                <a href="{% url 'cart' %}" class="icon">
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="d-flex cartproductcount">0</span>
+                </a>
+              {% else %}
+                <a href="{% url 'cart' %}" class="icon">
+                  <i class="fas fa-shopping-cart"></i>
+                </a>
+              {% endif %}
+            {% else %}
+            <a href="{% url 'cart' %}" class="icon">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="d-flex">0</span>
+            </a>
+            {% endif %}
+            </div>
+
+        </div>
+      </div>
+    </nav>
+
+    {% block maincontent %}
+    {% endblock maincontent %}
+
+    {% comment %} <!-- Contact -->
+    <section class="section contact">
+      <div class="row">
+        <div class="col">
+          <h2>EXCELLENT SUPPORT</h2>
+          <p>We love our customers and they can reach us any time
+          of day we will be at your service 24/7</p>
+          <a href="{% url 'contact' %}" class="btn btn-1">Contact</a>
+        </div>
+        <div class="col">
+          <form action="{% url 'subscription_email' %}" method="post">
+            {% csrf_token %}
+            <div>
+              <input type="email" placeholder="Email Address" name='email' required>
+              <input type="submit" value="Send">
+            </div>
+          </form>
+        </div>
+      </div>
+    </section> {% endcomment %}
+
+    <!-- Footer -->
+    <footer>
+      <div class="main-content">
+        <div class="left box">
+          <h2>Categories</h2>
+          <div class="content">
+            <div class="content-weblinks">
+              <a href="{% url 'skincare' %}">Electronics</a>
+              <a href="{% url 'face' %}">Women's Fashion</a>
+              <a href="{% url 'body' %}">Lifestyle</a>
+       
+            </div>
+            <div class="social">
+              <a rel="nofollow" href="#" target="_blank"><span class="fab fa-facebook-f"></span></a>
+              <a rel="nofollow" href="#" target="_blank"><span class="fab fa-instagram"></span></a>
+              <a rel="nofollow" href="#" target="_blank"><span class="fab fa-tiktok"></span></a>
+              <a rel="nofollow" href="#" target="_blank"><span class="fab fa-twitter"></span></a>
+              <a rel="nofollow" href="#" target="_blank"><span class="fab fa-youtube"></span></a>
+              <a href="#" target="_blank"><span class="fas fa-paperclip"></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="center box">
+          <h2>Address</h2>
+          <div class="content">
+            <div class="place">
+              <span class="fas fa-map-marker-alt"></span>
+              <span class="text">Kathmandu, Nepal</span>
+            </div>
+            <div class="phone">
+              <span class="fas fa-phone-alt"></span>
+              <span class="text">+977 9800000000</span>
+            </div>
+            <div class="email">
+              <span class="fas fa-envelope"></span>
+              <span class="text">HamroPasal@gmail.com</span>
+            </div>
+          </div>
+        </div>
+        <div class="right box">
+          <h2>Information</h2>
+          <div class="content">
+            <a href="{% url 'about' %}">About us</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'terms' %}">Term & Conditions</a>
+            <a href="{% url 'django.contrib.sitemaps.views.sitemap' %}" target="_blank">Sitemap</a>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <center>
+          <a href="/" style="text-decoration: none;">HamroPasal</a> | 
+          <span class="far fa-copyright"></span> <span><span id="copyrightyear"></span> All rights reserved.</span>
+        </center>
+      </div>
+    </footer>
+  </body>
+  <script src="{% static 'js/jquery.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/glide.min.js"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/slider.js' %}"></script>
+  <script src="{% static 'js/index.js' %}"></script>
+  <script src="{% static 'js/wishlist.js' %}"></script>
+  <script src="{% static 'js/cart.js' %}"></script>
+  <script src="{% static 'js/navigation.js' %}"></script>
+  <script>
+    $(()=>{
+    setTimeout(function(){
+      $('.alert').fadeIn();
+      setTimeout(function(){
+        $('.alert').fadeOut();
+      }, 2200);
+    }, 2000);
+    $('.alert span:last-child').on('click',function(){
+        $(this).parent().fadeOut();
+      })
+  })
+  </script>
+  <script>
+    const samay = new Date();
+    const currentyear = samay.getFullYear();
+    document.getElementById("copyrightyear").innerHTML = currentyear;
+  </script>
+  {% block jscode %}
+  {% endblock jscode %}
+</html>

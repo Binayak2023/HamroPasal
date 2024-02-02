@@ -1,0 +1,7 @@
+{% autoescape off %}
+<h1 style="color: #ce4f3e;">Hi {{ user.username }},</h1>
+Thankyou for signing up for HamroPasal.
+Please click on the link below to confirm your registration:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}

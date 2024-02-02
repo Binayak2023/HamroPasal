@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}HamroPasal{% endblock title %}
+
+{% block maincontent %}
+<!-- Message popup -->
+<div class="message-popup select-address-popup">
+  <div></div>
+  <p><span style="color: rgb(251, 252, 249);">Login</span> or <span style="color: rgb(251, 253, 249);">Signup</span> to add products to your cart.</p>
+  <div class="hide-message-popup">&times;</div>
+</div>
+
+<!-- Hero section -->
+<div class="hero">
+    <div class="glide" id="glide_1">
+      <div class="glide__track" data-glide-el="track">
+        <ul class="glide__slides heroforeshadow">
+          {% if slides %}
+          {% for slide in slides %}
+          <li class="glide__slide">
+            <div class="center">
+              <div class="left">
+                <span class="" style="text-transform: capitalize;">{{slide.small_title}}</span>
+                <h1 class=""  style="text-transform: uppercase;">{{slide.main_title}}</h1>
+                <p style="text-transform: capitalize;">{{slide.third_title}}</p>
+                <a href="{{slide.link_to}}" class="hero-btn" style="text-transform: uppercase; background: #78a9ee; border-radius:40px;">{{slide.button_text}}</a>
+              </div>
+              <div class="right" style="height: 700px; " >
+                  <img  class="img1" src="/media/{{slide.photo}}" alt="{{slide.main_title}}">
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+</div>
+
+<!-- Featured -->
+<section class="section new-arrival featured">
+  <div class="title">
+      <h1 style="color: #2a3166">Featured Products</h1>
+  </div>
+  <div class="product-center owl-carousel" id="slider1" style="">
+      {% for pro in allprod %}
+      <div class="product-item" style=" border-radius: 40px; ">
+          <div class="overlay">
+              <a href="{% url 'productdetail' pro.slug %}" class="product-thumb" >
+                  <img src="{{ pro.photo.url }}" alt="{{pro.name}}" />
+              </a>
+          </div>
+          <div class="product-info">
+              <span>| Discount-{{pro.discount_percent}}%</span>
+              <a href="{% url 'productdetail' pro.slug %}">{{ pro.name }}</a>
+              <h4>Rs. {{ pro.selling_price }}</h4>
+              {% if pro.available_quantity > 0 %}
+              <div class="cartbutton" >
+                {% if user.is_authenticated %}
+                <button data-id="{{pro.id}}" data-url="{% url 'add_to_cart' %}" class="initialbutton ib{{pro.id}}" style=" border-radius: 40px ">Add To Cart</button>
+                <button data-id="{{pro.id}}" data-url="{% url 'remove_from_cart' %}" class="minusbutton mb{{pro.id}}">-</button>
+                <span data-id="{{pro.id}}"class="buttontext bt{{pro.id}}"></span>
+                <button data-id="{{pro.id}}" data-url="{% url 'add_to_cart' %}" class="plusbutton pb{{pro.id}}">+</button>
+                {% else %}
+                <button class="initialbutton show-message-popup" >Add To Cart</button>
+                {% endif %}
+              </div>
+              {% else %}
+                  <div class="cartbutton">
+                      <button class="initialbuttondisabled" style="cursor: not-allowed;background: #444; border-radius:40px">Out of Stock</button>
+                  </div>
+              {% endif %}
+          </div>
+          {% comment %} <ul class="icons">
+              <a href="{% url 'productdetail' pro.slug %}"><li style="cursor: not-allowed;background: #444;border-radius: 140px;"> Quick View</li></a>
+          </ul> {% endcomment %}
+      </div>
+      {% endfor %}
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="section category" style="padding: 2.5rem 0 5rem 0; background:#78a9ee">
+    <div class="cat-center" style="background:#78a9ee">
+        <div class="cat"style=" border-radius: 140px; background:#78a9ee" >
+          <img src="{% static 'img/earbud.jpg' %}" alt="Skin Care Category Products" />
+          <div>
+            <a href="{% url 'skincare' %}" ><p>Electronics</p></a>
+          </div>
+        </div>
+        <div class="cat" style=" border-radius: 140px; background:#78a9ee">
+          <img src="{% static 'img/bodycare.png' %}" alt="Body Care Category Products" />
+          <div>
+            <a href="{% url 'body' %}"><p>Women</p></a>
+          </div>
+        </div>
+        <div class="cat" style=" border-radius: 140px; background:#78a9ee">
+          <img src="{% static 'img/download.jpg' %}" alt="Miscellaneous Category Products" />
+          <div>
+            <a href="{% url 'hair' %}"><p >Men</p></a>
+          </div>
+        </div>
+    </div>
+</section>
+  
+      <!-- New Arrivals -->
+<section class="section new-arrival">
+    <div class="title">
+        <h1 style="color: #2a3166">NEW ARRIVALS</h1>
+    </div>
+    <div class="product-center">
+        {% for pro in disprod %}
+        <div class="product-item">
+            <div class="overlay">
+                <a href="{% url 'productdetail' pro.slug %}" class="product-thumb">
+                    <img src="{{ pro.photo.url }}" alt="{{pro.name}}" />
+                </a>
+            </div>
+            <div class="product-info">
+                <span>{{ pro.category.title}} | Discount-{{pro.discount_percent}}%</span>
+                <a href="{% url 'productdetail' pro.slug %}">{{ pro.name }}</a>
+                <h4>Rs. {{ pro.selling_price }}</h4>
+                <input type="hidden" name="productSellingPrice" class="productSellingPrice" value='{{pro.selling_price}}'>
+                <input type="hidden" name="productMarkedPrice" class="productMarkedPrice" value='{{pro.marked_price}}'>
+                {% if pro.available_quantity > 0 %}
+                <div class="cartbutton">
+                  {% if user.is_authenticated %}
+                    <button data-id="{{pro.id}}" data-url="{% url 'add_to_cart' %}" class="initialbutton ib{{pro.id}}" style="border-radius:40px">Add To Cart</button>
+                    <button data-id="{{pro.id}}" data-url="{% url 'remove_from_cart' %}" class="minusbutton mb{{pro.id}}">-</button>
+                    <span data-id="{{pro.id}}"class="buttontext bt{{pro.id}}"></span>
+                    <button data-id="{{pro.id}}" data-url="{% url 'add_to_cart' %}" class="plusbutton pb{{pro.id}}">+</button>
+                    {% else %}
+                    <button class="initialbutton show-message-popup" style='border-radius:140px'>Add To Cart</button>
+                    {% endif %}
+                </div>
+                {% else %}
+                    <div class="cartbutton">
+                        <button class="initialbuttondisabled" style="cursor: not-allowed;background: #444; border-radius:40px">Out of Stock</button>
+                    </div>
+                {% endif %}
+            </div>
+            {% comment %} <ul class="icons">
+                <a href="{% url 'productdetail' pro.slug %}"><li> Quick View</li></a>
+            </ul> {% endcomment %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+  
+<!-- Promo -->
+{% comment %} {% if banner %}
+<section class="section banner">
+    <div class="left">
+        <span class="trend" style="text-transform: capitalize;width: 95%;">{{banner.small_title}}</span>
+        <h1 style="text-transform: uppercase;width: 90%;">{{banner.main_title}}</h1>
+        <p style="text-transform: capitalize;width: 95%;">{{banner.third_title}}</p>
+        <a href="{{banner.link_to}}" class="btn btn-1" style="text-transform: uppercase;">{{banner.button_text}}</a>
+    </div>
+    <img src="/media/{{banner.photo}}" alt="{{banner.main_title}}">
+</section>
+{% endif %} {% endcomment %}
+
+  <!-- PopUp -->
+{% if user.is_anonymous %}
+<div class="popup hide-popup">
+  <div class="popup-content">
+    <div class="popup-close">
+      <i class='bx bx-x'></i>
+    </div>
+    <div class="popup-left">
+      <div class="popup-img-container">
+        <img class="popup-img" src="{% static 'img/pic02.jpg' %}" alt="popup">
+      </div>
+    </div>
+    <div class="popup-right">
+      <div class="right-content">
+        <h1>LogIn Or<span> SignUp</span> Now</h1>
+        <p>Sign up to our newsletter and get notified about the coming best products in the store!! 
+        </p>
+          <a href="{% url 'signup' %}">Register</a>
+          <a href="{% url 'login' %}">LogIn</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Messenger -->
+
+{% endblock maincontent %}
+{% block jscode %}
+<script src="{% static 'js/popup.js' %}"></script>
+<!-- Messenger -->
+{% endblock jscode %}

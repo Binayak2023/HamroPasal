@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Add Address/Customer | HamroPasal{% endblock title %}
+{% block additionalheader %}
+<meta name="robots" content="nofollow" />
+{% endblock additionalheader %}
+{% block maincontent %} 
+<div class="customer-container">
+    <div class="indicators">
+        <div class="buttons">
+            <a href="{% url 'addcustomer' %}"><button><i class="fas fa-plus-circle"></i> Add new address</button></a>
+            <a href="{% url 'customers' %}"><button>My addresses</button></a>
+        </div>
+    </div>
+    <div class="customer-form">
+        <form action="{% url 'addcustomer' %}" method="post" novalidate>
+            <h1>Add New Customer/Address</h1>
+            {% csrf_token %}
+            {% for fm in form %}
+            <i style="color: red;font-style: normal;">{{fm.errors|striptags}}</i> {{fm.label_tag}}
+                {{fm}}
+            {% endfor %}
+
+            <div class="buttons">
+                <button type="submit" class="signupbtn"><i class="fas fa-plus-circle"></i> Add Adress</button>
+                <a href="{% url 'home' %}"><button type="button" class="cancelbtn"><i class="fas fa-times-circle"></i> Cancel</button></a>
+            </div>
+            {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <p class='form-field-error' style="color: red;">{{error}}</p>
+            {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock maincontent %}

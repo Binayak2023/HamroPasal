@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Cart | HamroPasal{% endblock title %}
+{% block maincontent %}
+<div class="container cart">
+    <table>
+      <tr id='carttablerow'>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+      {% if cartprod %}
+      {% for c in cartprod %}
+      <tr data-table-id = '{{c.product.id}}' data-table-url = '{% url "delete_from_cart" %}' class='datatableid{{c.product.id}}' id='carttablerow'>
+        <td>
+          <div class="cart-info">
+            <img src="{{c.product.photo.url}}" alt="{{c.product.name}}" />
+            <div>
+             <a href="{% url 'productdetail' c.product.slug %}"> <span style="color: #d83c27;font-size: 1.5rem;"><strong>{{c.product.name}}</strong></span><br></a>
+              <span>Price: Rs.{{c.product.selling_price}}</span> <br />
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cartbutton" style="justify-content: flex-start;">
+            <button data-id="{{c.product.id}}" data-url="{% url 'remove_from_cart' %}" class="minusbutton mb{{c.product.id}}" style="display: flex; align-items: center;justify-content: center;">-</button>
+            <span data-id="{{c.product.id}}"class="buttontext bt{{c.product.id}}" style="display: flex;align-items: center;justify-content: center;margin-bottom: 1rem;">{{c.quantity}}</span>
+            <button data-id="{{c.product.id}}" data-url="{% url 'add_to_cart' %}" class="plusbutton pb{{c.product.id}}" style="display: flex;align-items: center;justify-content: center;">+</button>
+          </div>
+        </td>
+        <td><input type="hidden" class="subTotals" name="subtotal" data-subtotal='{{c.sub_total}}'> Rs.{{c.sub_total}}</td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <h3>No products in your cart</h3>
+      {% if user.is_anonymous %}
+      <h3><a style="color: #ce4f3e;" href="{% url 'login' %}"> Login</a> or <a style="color: #ce4f3e;" href="{% url 'signup' %}">Signup</a> to add products to your cart</h3>
+      {% endif %}
+      {% endif %}
+    </table>
+    <div class="total-price">
+      <table>
+        <tr>
+          <td>Total Product Cost:</td>
+          <td class="prodOnlyTotal"></td>
+        </tr>
+      </table>
+      {% if user.is_authenticated %}
+      <a href="{% url 'checkout' %}" class="checkout btn"><i class="fas fa-arrow-circle-right"></i> Proceed To Checkout</a>
+      {% else %}
+      <button class="checkout btn" style="cursor: pointer;outline: none;border: none;"><i class="fas fa-arrow-circle-right"></i> Proceed To Checkout</button>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Other Products -->
+  <section class="section new-arrival featured">
+      <div class="top container">
+        <h1>Other Products</h1>
+        <a href="{% url 'products' %}" class="view-more">View more</a>
+    </div>
+      <div class="product-center owl-carousel" id="slider1">
+          {% for pro in otherprod %}
+          <div class="product-item">
+              <div class="overlay">
+                  <a href="{% url 'productdetail' pro.slug %}" class="product-thumb">
+                      <img src="{{ pro.photo.url }}" alt="{{pro.name}}" />
+                  </a>
+              </div>
+              <div class="product-info">
+                <span> | Discount-{{pro.discount_percent}}%</span>
+                <a href="{% url 'productdetail' pro.slug %}">{{ pro.name }}</a>
+                <h4>Rs. {{ pro.selling_price }}</h4>
+                <div class="cartbutton">
+                    <a href="{% url 'productdetail' pro.slug %}"><button class="quickviewbutton">Quick View</button></a>
+                </div>
+              </div>
+            <ul class="icons">
+                <a href="{% url 'productdetail' pro.slug %}"><li>Quick View</li></a>
+            </ul>
+          </div>
+          {% endfor %}
+      </div>
+    </section>
+    {% endblock maincontent %}
+{% block jscode %}
+<script>
+  const subTotals = document.querySelectorAll('.subTotals');
+  let total = 0
+  subTotals.forEach(element => {
+    total +=parseFloat(element.getAttribute('data-subtotal'))
+  });
+  document.querySelector('.prodOnlyTotal').innerText = 'Rs.'+total+'.0';
+</script>
+{% endblock jscode %}

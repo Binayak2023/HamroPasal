@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hair Care Products | HamroPasal{% endblock title %}
+{% block maincontent %}
+<!-- Message popup -->
+<div class="message-popup select-address-popup">
+  <div></div>
+  <p><span style="color: rgb(251, 252, 249);">Login</span> or <span style="color: rgb(251, 253, 249);">Signup</span> to add products to your cart.</p>
+  <div class="hide-message-popup">&times;</div>
+</div>
+
+<section class="section all-products" id="products">
+    <div class="top container">
+      <h1 style="color: #2a3166">Hair Care Products</h1>
+      <form action="{% url 'hair' %}" method="GET" class="sortform">
+        <select name='sort'>
+          <option value="0">Sub Categories</option>
+          <option value="1">Hair Treatment</option>
+          <option value="2">Hair Serum</option>
+          <option value="3">Hair Shampoo</option>
+          <option value="4">Hair Conditioner</option>
+        </select>
+      </form>
+    </div>
+    <div class="product-center">
+      {% if allprod %}
+        {% for pro in allprod %}
+        <div class="product-item">
+            <div class="overlay">
+                <a href="{% url 'productdetail' pro.slug %}" class="product-thumb">
+                    <img src="{{ pro.photo.url }}" alt="{{ pro.name }}" />
+                </a>
+            </div>
+            <div class="product-info">
+              <span>| Discount-{{pro.discount_percent}}%</span>
+                <a href="{% url 'productdetail' pro.slug %}">{{ pro.name }}</a>
+                <h4>Rs. {{ pro.selling_price }}</h4>
+                {% if pro.available_quantity > 0 %}
+                    <div class="cartbutton">
+                    {% if user.is_authenticated %}
+                        <button data-id="{{pro.id}}" data-url="{% url 'add_to_cart' %}" class="initialbutton ib{{pro.id}}">Add To Cart</button>
+                        <button data-id="{{pro.id}}" data-url="{% url 'remove_from_cart' %}" class="minusbutton mb{{pro.id}}">-</button>
+                        <span data-id="{{pro.id}}"class="buttontext bt{{pro.id}}"></span>
+                        <button data-id="{{pro.id}}" data-url="{% url 'add_to_cart' %}" class="plusbutton pb{{pro.id}}">+</button>
+                        {% else %}
+                        <button class="initialbutton show-message-popup">Add To Cart</button>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="cartbutton">
+                        <button class="initialbuttondisabled" style="cursor: not-allowed;background: #444;">Out of Stock</button>
+                    </div>
+                {% endif %}
+            </div>
+            {% comment %} <ul class="icons">
+                <a href="{% url 'productdetail' pro.slug %}"><li> Quick View</li></a>
+            </ul> {% endcomment %}
+        </div>
+        {% endfor %}
+      {% else %}
+      <h2 style="font-weight: 500;">No Products</h2>
+      {% endif %}
+    </div>
+
+  </section>
+
+  <section class="paginatorcontainer">
+    <div class="paginatorwrapper">
+        {% if allprod.has_previous %}
+            <button><a href="?page={{allprod.previous_page_number}}&sort={{sort}}">Previous</a></button>
+        {% else %}
+            <button disabled>Prev</button>
+        {% endif %}
+        {% for page in pagelist %}
+        <button><a href="?page={{page}}&sort={{sort}}" class='page{{page}}'>{{page}}</a></button>
+        {% endfor %}
+        {% if allprod.has_next %}
+            <button><a href="?page={{allprod.next_page_number}}&sort={{sort}}">Next</a></button>
+        {% else %}
+        <button disabled>Next</button>
+        {% endif %}
+    </div>
+    <div class="paginatordetail">
+    <span>Page {{ allprod.number }} of {{ allprod.paginator.num_pages }}</span>
+    </div>
+    <input type="hidden" name="nothing" class="activepageindicator" data-pagenumber="{{currentpage}}">
+    <input type="hidden" name="nothing" class="sortindicator" data-sortnumber="{{sub_categoryint}}">
+</section>
+{% endblock maincontent %}
+{% block jscode %}
+<script>
+  $(()=>{
+    const pageNumber = $('.activepageindicator').attr('data-pagenumber');
+    $(`.page${pageNumber}`).parent().addClass('activepage');
+    $('.sortform select').on('change', function(){
+      $(this).parent().submit();
+    })
+    const sortNumber = $('.sortindicator').attr('data-sortnumber');
+    $('.sortform select').val(sortNumber)
+  });
+</script>
+{% endblock jscode %}

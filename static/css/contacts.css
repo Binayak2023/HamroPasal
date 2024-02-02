@@ -1,0 +1,151 @@
+.container{
+    max-width: 1200px;
+    width: 90%;
+    margin: 20px 0 0 5%;
+    background: #fff;
+    border-radius: 6px;
+    margin-bottom: 50px;
+    padding: 0;
+    height: 600px;
+  }
+  .container .content{
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+  .container .content .left-side{
+    height: 100%;
+    width: 50%;
+    background: url('../img/pic02.jpg') 0/cover no-repeat;
+    position: relative;
+  }
+  .container .content .left-side::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.377);
+}
+  .container .content .left-side .contactinfo{
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 80%;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 100;
+  }
+  .contactinfo p {
+    margin: 20px 0 0 10px;
+  }
+  .contactinfo p a{
+    color: #fff;
+  }
+  .contactinfo p:last-child {
+    margin: 50px 0 0 0;
+  }
+  .container .content .right-side{
+    width: 50%;
+    margin-left: 75px;
+    padding: 10px 0;
+  }
+  .content .right-side .topic-text{
+    font-size: 23px;
+    font-weight: 600;
+    color: var(--secondaryhover);
+  }
+  .right-side .input-box{
+    height: 50px;
+    width: 100%;
+    margin: 12px 0;
+  }
+  .right-side .input-box input,
+  .right-side .input-box textarea{
+    height: 100%;
+    width: 90%;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-left: 6px solid var(--secondaryhover);
+    border-bottom: 3px solid var(--secondaryhover);
+    padding: 0 10px;
+    resize: none;
+  }
+  .right-side .input-box input[type="radio"] {
+      width: 3%;
+      min-width: 15px;
+      height: 50%;
+  }
+    .right-side .input-box span{
+    position: inherit;
+    font-size: 16px;
+    padding-bottom: 20px;
+  }
+  .right-side .message-box{
+    min-height: 110px;
+  }
+  .right-side .input-box textarea{
+    padding-top: 6px;
+  }
+  .right-side .button{
+    display: inline-block;
+    margin-top: 12px;
+  }
+  .right-side .button input[type="submit"]{
+    color: #fff;
+    font-size: 18px;
+    outline: none;
+    border: none;
+    padding: 8px 16px;
+    background: var(--secondaryhover);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .right-side .button input[type="submit"]:hover{
+    background: var(--secondarycolor);
+  }
+  @media screen and (max-width: 1024px ){
+    .container .content .right-side{
+      margin-left: 25px;
+    }
+  }
+  @media screen and (max-width: 876px ){
+    .container {
+      height: 850px;
+    }
+    .container .content{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      height:950px;
+      overflow: visible;
+    }
+    .container .content .left-side{ 
+      width: 100%;
+      height: 30%;
+      min-height: 350px;
+    }
+    .container .content .left-side .contactinfo{
+      top: 15px;
+      left: 15px;
+      width: 80%;
+    }
+    .contactinfo p {
+      margin: 0;
+    }
+    .contactinfo p:last-child {
+      margin: 10px 0 0 0;
+    }
+    .container .content .right-side {
+      width: 100%;
+      height: 70%;
+      margin-left: 0px;
+      padding: 10px;
+    }
+  }

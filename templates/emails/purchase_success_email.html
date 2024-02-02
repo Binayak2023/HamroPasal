@@ -1,0 +1,63 @@
+<h2 style="color: #d83c27;">Hi {{ name }},</h2>
+<h4 style="color: rgb(0, 33, 83);">Thanks for purchasing the following item/s from our online store.</h4>
+<p>Your ordered products will be delived shortly in your delivery location: </p>
+<p>
+    {% for keys, values in ops.items %}
+        {% if forloop.counter == 1 %}
+            {% for v in values.values %}
+                {% if forloop.counter == 1%}
+                    <span style="color: rgb(255, 89, 11);">
+                        <strong>{{v}} </strong><br>
+                {% elif forloop.counter == 2 %}
+                        {{v}}
+                    </span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</p>
+<table style="border-collapse: collapse;width: 100%;">
+    <tr>
+        <th style="background: #d83c27; color: #fff;text-align: left;padding: 4px;border: 1px solid #ccc;">S.N.</th>
+        <th style="background: #d83c27; color: #fff;text-align: left;padding: 4px;border: 1px solid #ccc;">Product</th>
+        <th style="background: #d83c27; color: #fff;text-align: left;padding: 4px;border: 1px solid #ccc;">Quantity</th>
+        <th style="background: #d83c27; color: #fff;text-align: left;padding: 4px;border: 1px solid #ccc;">Subtotal</th>
+    </tr>
+    {% for keys, values in ops.items %}
+    <tr>
+        <td style="background: rgb(238, 238, 238); color:rgb(0, 0, 0);text-align: left;padding: 4px;border: 1px solid #ccc;">{{forloop.counter}}</td>
+        {% for v in values.values %}
+            {% if forloop.counter == 3 %}
+                <td style="background: rgb(238, 238, 238); color:rgb(0, 0, 0);text-align: left;padding: 4px;border: 1px solid #ccc;">
+                    <span><strong>{{v.0}}</strong></span><br>
+                    <span>{{v.1}}</span><br>
+                    <span>Price: {{v.2}}</span>
+                </td>
+            {% elif forloop.counter >= 4 %}
+                <td style="background: rgb(238, 238, 238); color:rgb(0, 0, 0);text-align: left;padding: 4px;border: 1px solid #ccc;">{{v}}</td>
+            {% else %}
+            {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<h4 style="color: rgb(0, 33, 83);">
+    {% for keys, values in ops.items %}
+        {% if forloop.counter == 1 %}
+            {% for v in values.values %}
+                {% if forloop.counter == 6%}
+                Delivery Charge: {{v.2}}<br>
+                {% if v.1 != 0 %}
+                Promo Code Discount: Rs. {{v.1}}<br>
+                {% endif %}
+                Total Cost: {{v.0}}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</h4>
+<p>
+Enjoy your day and be sure to order from our online store in the coming days,
+we are happy to provide you with just the product you need.
+</p>
+<p><strong>Thankyou!!</strong></p>

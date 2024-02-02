@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Contact Us | HamroPasal{% endblock title %}
+{% block css %}
+<style>
+    #id_message{
+        padding: .5rem;
+        font-size: 1.5rem;
+    }
+  /* #gmap_canvas {
+    height: 500px;
+    width: 100%;
+    box-shadow: 0 0 10px #aaa;
+    margin-top: 20px;
+  } */
+</style>
+<link rel="stylesheet" href="{% static 'css/contacts.css' %}">
+{% endblock css %}
+{% block maincontent %} 
+<div class="container">
+    <div class="content">
+      <div class="left-side">
+        <div class="contactinfo">
+          <h2 style="border-bottom: 3px solid #b84d4f;font-size: 28px;">Contact Information</h2>
+          <p>Fill up the form and our Team will get back to you within 24 hours.</p>
+          <p style="line-height: 2;font-size: 18px;"><i class="fas fa-phone-alt"></i></i> &nbsp; +977 9800000000</p>
+          <p style="font-size: 18px;"><i class="far fa-envelope-open"></i> &nbsp; HamroPasal@gmail.com</p>
+          <p style="font-size: 20px;">
+              <a rel="nofollow" href="#" target="_blank"><i class="fab fa-facebook"></i></a> &nbsp;
+              <a rel="nofollow" href="#" target="_blank"><i class="fab fa-instagram"></i></a> &nbsp;
+              <a rel="nofollow" href="#" target="_blank"><i class="fab fa-twitter"></i></a> &nbsp;
+              <a rel="nofollow" href="#" target="_blank"><i class="fab fa-youtube"></i></a> &nbsp;
+              <a rel="nofollow" href="#" target="_blank"><i class="fab fa-tiktok"></i></a> &nbsp;
+              <a href="#" target="_blank"><i class="fas fa-paperclip"></i></a> &nbsp;
+          </p>
+        </div>
+      </div>
+      <div class="right-side">
+        <div class="topic-text" style="font-size: 28px;">Send Us A Message</div>
+        <p style="font-size: 18px;">If you have any queries and suggestions, you can send me message from here.</p>
+        <form action="{% url 'contact' %}" method="POST">
+        {% csrf_token %}
+          <div class="input-box">
+            <input type="text" placeholder="Enter your name" name='name' required>
+          </div>
+          <div class="input-box">
+            <input type="email" placeholder="Enter your email" name='email' required>
+          </div>
+          <div class="input-box">
+            <input type="text" placeholder="Enter your phone" pattern="[0-9]{10}" name='phone' required>
+          </div>
+          <div class="input-box">
+            <p style="font-size: 17px;">Preffered method of communication</p>
+            <span style="padding-left: 20px;">Phone: </span><input type="radio" name="preference" id="phone" value="Phone" checked>
+            <span>Email: </span><input type="radio" name="preference" value="Email" id="email">
+          </div>
+          <div class="input-box message-box">
+            <input type="text" placeholder="Enter your message" name="message" required>
+          </div>
+          <div class="button">
+            <input type="submit" value="Send Now" >
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+<div class="aftercontainer" style="height: 50px;width: 100%;"></div>
+{% endblock maincontent %}

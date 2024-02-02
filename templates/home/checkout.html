@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Checkout | HamroPasal{% endblock title %}
+
+{% block maincontent %}
+<div class="message-popup select-address-popup">
+    <div></div>
+    <p>Select or add an address first</p>
+    <div class="hide-message-popup">&times;</div>
+</div>
+
+<div class="container checkout-container">
+    <div class="checkout-products">
+        <h2>Order Summary</h2>
+        <button class="checkout-backtocart"><a href="{% url 'cart' %}"><i class="fas fa-arrow-circle-left"></i> Back to Cart</a></button>
+        {% for p in cartprod %}
+        <div class="checkout-product">
+            <img src="{{p.product.photo.url}}" alt="{{p.product.name}}" />
+            <div>
+                <p><strong>{{p.product.name}}</strong></p>
+                <span>Quantity: {{p.quantity}}</span> <br />
+                <span><strong>Price:</strong> Rs.{{p.sub_total}}</span> 
+                <input type="hidden" name="subTotals" class="subTotals" data-subtotal="{{p.sub_total}}">
+            </div>
+        </div>
+        {% endfor %}
+        <h4 class="prodOnlyTotal"></h4>
+        <h4 class="deliveryCharge">Delivery Charge: Select an address first<sup style="color: red;">*</sup></h4>
+        <h4 class="checkoutTotal"></h4>
+        <div class="checkout-terms">
+            <p style="color: #444;">
+                <strong>Terms and conditions:</strong>
+                Get a flat 10% discount by signing up and registering on the platform.
+                Goods once sold won't be returned.
+                In case you change your mind to not buy the product after it is dispatched for delivery, we will charge you the delivery fees which is NRs. 100 for inside Kathmandu valley and Rs. 200 for outside the valley.
+                There is so much effort we put forth for creating order, packaging and delivery. So, unless you aren't serious about the order, please feel free to not order in the first place.
+            </p>
+        </div>
+    </div>
+    <div class="payment">
+        <div class="another-address">
+            <button><i class="fas fa-plus-circle"></i> Add new Customer/Address</button>
+        </div>
+        <div class="customer-form">
+            <form action="{% url 'checkout' %}" method="post" novalidate>
+                <h3>Add New Customer/Address</h3>
+                {% csrf_token %}
+                {% for fm in form %}
+                <i style="color: red;font-style: normal;">{{fm.errors|striptags}}</i> {{fm.label_tag}}
+                    {{fm}}
+                {% endfor %}
+    
+                <div class="buttons">
+                    <button type="submit" class="signupbtn"><i class="fas fa-plus-circle"></i> Add Adress</button>
+                    <a href="{% url 'home' %}"><button type="button" class="cancelbtn"><i class="fas fa-times-circle"></i> Cancel</button></a>
+                </div>
+            </form>
+        </div>
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <p class='form-field-error' style="color: red;">{{error}}</p>
+        {% endfor %}
+        {% endif %}
+        <form action="{% url 'place_order' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="unique-order-id" id="unique-order-id" value="">
+            <input type="hidden" name="charge" id="charge" value="">
+            <input type="hidden" name="totalcost" id="totalcost" value="">
+            <h3 style="border-bottom: 1px solid #888;">Select Address</h3>
+            {% if customers %}
+            {% for c in customers %}
+            <div class="address">
+                <div class="address-radio">
+                    <input type="radio" name="address" id="address" value="{{c.id}}" data-district="{{c.district}}" onclick="radioFunction(this.getAttribute('data-district'))">
+                </div>
+                <div class="address-desc">
+                    <h4>{{c.full_name}}</h4>
+                <p>{{c.locality}}, {{c.address}}, {{c.district }} -{% if c.zip_code %}{{c.zip_code}}{% endif %}</p>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h4 style="padding: 1rem;text-align: center;">No Address Yet</h4>
+            {% endif %}
+            <h4 style="padding-left: 1rem;">Enter a promo code (if any): </h4>
+            <input type="text" name='promocode' style="margin-left: 2.1rem;height: 24px;outline: none;">
+            <div class="payment-option-box">
+                <h4>Payment options:</h4>
+                <select name="payment-option" id="payment-option">
+                    <option value="1">Cash On Delivery</option>
+                </select>
+            </div>
+            {% if customers %}
+            <p style="transition: .3s;padding-left: 2rem;font-weight: 500;color: #d43a26;" id="selectaddress"></p>
+            <input  type="submit" class="checkout-submit" value="Submit">
+            {% else %}
+            <input type="submit" class="show-message-popup" value="Submit">
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock maincontent %}
+{% block jscode %}
+<script src="{% static 'js/out.js' %}"></script>
+{% endblock jscode %}

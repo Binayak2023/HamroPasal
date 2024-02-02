@@ -1,0 +1,49 @@
+Hi {{ name }},
+Thanks for purchasing the following item/s from our online store.
+Your ordered products will be delived shortly in your delivery location:
+    {% for keys, values in ops.items %}
+        {% if forloop.counter == 1 %}
+            {% for v in values.values %}
+                {% if forloop.counter == 1%}
+                        {{v}}
+                {% elif forloop.counter == 2 %}
+                        {{v}}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    S.N.
+    Product
+    Quantity
+    Subtotal
+    {% for keys, values in ops.items %}
+        {{forloop.counter}}
+        {% for v in values.values %}
+            {% if forloop.counter == 3 %}
+                    {{v.0}}
+                    {{v.1}}
+                    Price: {{v.2}}
+            {% elif forloop.counter >= 4 %}
+                {{v}}
+            {% else %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    {% for keys, values in ops.items %}
+        {% if forloop.counter == 1 %}
+            {% for v in values.values %}
+                {% if forloop.counter == 6%}
+                Delivery Charge: {{v.2}}<br>
+                {% if v.1 != 0 %}
+                Promo Code Discount: Rs. {{v.1}}<br>
+                {% endif %}
+                Total Cost: {{v.0}}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+Enjoy your day and be sure to order from our online store in the coming days,
+we are happy to provide you with just the product you need.
+Thankyou!!

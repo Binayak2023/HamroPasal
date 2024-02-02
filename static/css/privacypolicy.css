@@ -1,0 +1,54 @@
+.privacy{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+.privacyimage{
+    height: 60vh;
+    width: 100%;
+    background: url('../img/pic02.jpg') center/cover no-repeat;
+    position: relative;
+    box-shadow: 2px 2px 10px 0 #bbb;
+}
+.privacyimage h1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ce4f3e;
+    text-shadow: 1px 1px 10px #1d1d1d94;
+    font-size: 6rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.privacyimage::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.300);
+}
+@supports (-webkit-text-stroke: 3px #ce4f3e) {
+    .privacyimage h1 {
+      -webkit-text-stroke: 3px #ce4f3e;
+      -webkit-text-fill-color: white;
+    }
+  }
+.privacytext{
+    width: 60%;
+    margin: 30px 0 50px 0;
+}
+.points li{
+    list-style-type: disc;
+}
+@media screen and (max-width: 992px){
+    .privacyimage {
+        font-size: 5rem;
+    }
+    .privacytext{
+        width: 80%;
+        margin: 30px 0 50px 0;
+    }
+}

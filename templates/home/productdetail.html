@@ -1,0 +1,215 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block title %}{{ product.name }} | HamroPasal{% endblock title %}
+{% block maincontent %}
+<!-- Message popup -->
+<div class="message-popup select-address-popup">
+  <div></div>
+  <p>
+    <span style="color: rgb(251, 252, 249)">Login</span> or
+    <span style="color: rgb(251, 253, 249)">Signup</span> to add products to
+    your cart.
+  </p>
+  <div class="hide-message-popup">&times;</div>
+</div>
+<!-- Product Details -->
+<section class="">
+  <div class="details container">
+    <div class="left image-container">
+      <div class="main">
+        <img src="{{product.photo.url}}" id="zoom" alt="{{ product.name }}" />
+      </div>
+    </div>
+    <div class="right">
+      <h1>{{product.name}}</h1>
+      <p>{% if product.weight != 0 %}{{product.weight}}{% endif %}</p>
+      <div class="price">Rs. {{product.selling_price}}</div>
+      {% if productincart == 'Yes' %}
+      <span style="display: block">Product already added to cart</span>
+      <a href="{% url 'cart' %}" class="addCart showincartbtn"
+        ><button>Show In Cart</button></a
+      >
+      {% else %}
+      <br />
+      {% if product.available_quantity > 0 %}
+      <div
+        class="cartbutton"
+        style="
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          z-index: 9;
+          padding: 0;
+          margin-bottom: 0.5rem;
+          margin-top: -2rem;
+        "
+      >
+        {% if user.is_authenticated %}
+        <button
+          data-id="{{product.id}}"
+          data-url="{% url 'add_to_cart' %}"
+          class="initialbutton ib{{product.id}}"
+          style="padding: 1.8rem; line-height: 0.2; border-radius: 3rem"
+        >
+          Add To Cart
+        </button>
+        <button
+          data-id="{{product.id}}"
+          data-url="{% url 'remove_from_cart' %}"
+          class="minusbutton mb{{product.id}}"
+          style="padding: 1.8rem; line-height: 0.2"
+        >
+          -
+        </button>
+        <span
+          data-id="{{product.id}}"
+          class="buttontext bt{{product.id}}"
+          style="padding: 1.8rem; line-height: 0.2"
+        ></span>
+        <button
+          data-id="{{product.id}}"
+          data-url="{% url 'add_to_cart' %}"
+          class="plusbutton pb{{product.id}}"
+          style="padding: 1.8rem; line-height: 0.2"
+        >
+          +
+        </button>
+        {% else %}
+        <button
+          class="initialbutton show-message-popup"
+          style="padding: 1.8rem; line-height: 0.2; border-radius: 3rem"
+        >
+          Add To Cart
+        </button>
+        {% endif %}
+      </div>
+      {% else %}
+      <div
+        class="cartbutton"
+        style="
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          z-index: 9;
+          padding: 0;
+          margin-bottom: 0.5rem;
+          margin-top: -2rem;
+          cursor: not-allowed;
+        "
+      >
+        <button
+          class="initialbuttondisabled"
+          style="
+            padding: 1.8rem;
+            line-height: 0.2;
+            border-radius: 3rem;
+            cursor: not-allowed;
+          "
+        >
+          Add To Cart
+        </button>
+      </div>
+      {% endif %} {% endif %}
+      <button
+        data-id="{{product.id}}"
+        data-url="{% url 'add_to_wishlist' %}"
+        class="wishlistbutton addToWishlist"
+      >
+        {{favoritemessage}}
+      </button>
+      {% if product.available_quantity > 0 %}
+      <p style="color: #ce4f3e; font-weight: 500">In Stock</p>
+      {% else %}
+      <p style="color: rgb(255, 16, 16); font-weight: 500">
+        This product is currently not available
+      </p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="product-desc">
+    <h2>Product Description</h2>
+    <p>{{product.desc|safe}}</p>
+  </div>
+</section>
+
+<!-- Related -->
+<section class="section new-arrival featured">
+  <div class="top container">
+    <h1 style="color: #2a3166">Related Products</h1>
+    <a href="{% url 'products' %}" class="view-more">View more</a>
+  </div>
+  <div class="product-center owl-carousel" id="slider1">
+    {% for pro in relatedprod %}
+    <div class="product-item">
+      <div class="overlay">
+        <a href="{% url 'productdetail' pro.slug %}" class="product-thumb">
+          <img src="{{ pro.photo.url }}" alt="{{pro.name}}" />
+        </a>
+      </div>
+      <div class="product-info">
+        <span>| Discount-{{pro.discount_percent}}%</span>
+        <a href="{% url 'productdetail' pro.slug %}">{{ pro.name }}</a>
+        <h4>Rs. {{ pro.selling_price }}</h4>
+        {% if pro.available_quantity > 0 %}
+        <div class="cartbutton">
+          {% if user.is_authenticated %}
+          <button
+          style="border-radius: 40px"
+            data-id="{{pro.id}}"
+            data-url="{% url 'add_to_cart' %}"
+            class="initialbutton ib{{pro.id}}"
+          >
+            Add To Cart
+          </button>
+          <button
+            data-id="{{pro.id}}"
+            data-url="{% url 'remove_from_cart' %}"
+            class="minusbutton mb{{pro.id}}"
+          >
+            -
+          </button>
+          <span data-id="{{pro.id}}" class="buttontext bt{{pro.id}}"></span>
+          <button
+            data-id="{{pro.id}}"
+            data-url="{% url 'add_to_cart' %}"
+            class="plusbutton pb{{pro.id}}"
+          >
+            +
+          </button>
+          {% else %}
+          <button class="initialbutton show-message-popup">Add To Cart</button>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="cartbutton">
+          <button
+            class="initialbuttondisabled"
+            style="cursor: not-allowed; background: #444; border-radius: 40px;"
+          >
+            Out of Stock
+          </button>
+        </div>
+        {% endif %}
+      </div>
+      <ul class="icons">
+        <a href="{% url 'productdetail' pro.slug %}"><li>Quick View</li></a>
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock maincontent %} {% block jscode %}
+<script src="{% static 'js/zoomsl.min.js' %}"></script>
+<script>
+  $(function () {
+    var docwidth = $(document).width();
+    if (docwidth >= 1200) {
+      $("#zoom").imagezoomsl({
+        zoomrange: [3, 2],
+        zindex: "99",
+      });
+    }
+  });
+</script>
+{% endblock jscode %}
